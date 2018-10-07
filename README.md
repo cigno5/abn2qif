@@ -14,4 +14,4 @@ between the accounts.
 ```bash
 python abn2qif.py configuration_file CAMT.053_file [CAMT.053_file_2 CAMT.053_file_3 ...] 
 ```
-m
+
