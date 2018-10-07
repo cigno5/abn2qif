@@ -1,5 +1,5 @@
 # abn2qif
-ABNAMRO transactions converter for HomeBank QIF file format
+ABN AMRO transactions converter for HomeBank QIF file format
 
 `abn2qif` is able to convert a zipped CAMT.053 file directly exported from ABN AMRO bank website into
 `.qif` file readable by [HomeBank](http://homebank.free.fr/), the popular personal financing application.
