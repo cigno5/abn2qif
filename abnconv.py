@@ -21,6 +21,16 @@ ABN_re = re.compile("(?P<payee>ABN AMRO Bank N.V.)\s+(?P<memo>\w+).+")
 
 SPAREN_re = re.compile("ACCOUNT BALANCED\s+(?P<memo>CREDIT INTEREST.+)For interest rates")
 
+STORTING_re = re.compile("STORTING\s+.+,PAS (\d+)")
+
+SUPPORTED_TRANSACTIONS = {
+    'bea': BEA_re,
+    'sepa': SEPA_re,
+    'abn': ABN_re,
+    'sparen': SPAREN_re,
+    'storting': STORTING_re
+}
+
 qif_account_tpl = """!Account
 N{name}
 T{type}
@@ -132,7 +142,7 @@ def process_entry(account_iban, elem):
         return None
 
     def _get_regex():
-        for _type, regexp in {'bea': BEA_re, 'sepa': SEPA_re, 'abn': ABN_re, 'sparen': SPAREN_re}.items():
+        for _type, regexp in SUPPORTED_TRANSACTIONS.items():
             _match = regexp.search(transaction_info)
             if _match:
                 return _type, _match
@@ -171,6 +181,11 @@ def process_entry(account_iban, elem):
         tsx.type = 'Bank'
         tsx.payee = "ABN AMRO Bank N.V."
         tsx.memo = match.group("memo")
+
+    elif tx_type == 'storting':
+        tsx.type = 'Cash'
+        tsx.payee = 'Unknwon'
+        tsx.memo = None
 
     else:
         raise ValueError('Transaction type not supported for "%s"' % transaction_info)
